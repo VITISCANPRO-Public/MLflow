@@ -1,0 +1,31 @@
+# MLflow core
+mlflow==3.7.0
+
+# Backend database (PostgreSQL/Neon)
+psycopg2-binary==2.9.10
+sqlalchemy==2.0.36
+
+# Artifact storage (S3)
+boto3==1.35.79
+botocore==1.35.79
+
+# ML frameworks support
+scikit-learn>=1.5.0
+numpy>=1.26.0
+pandas>=2.2.0
+
+# Serialization & storage
+cloudpickle>=3.1.0
+pyarrow>=18.0.0
+protobuf>=5.29.0
+
+# Server & API
+gunicorn==23.0.0
+flask>=3.0.0
+
+# Monitoring & utilities
+python-dotenv==1.0.1
+
+# Optional but recommended
+requests>=2.31.0
+packaging>=24.0
