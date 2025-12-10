@@ -41,6 +41,5 @@ exec mlflow server \
     --default-artifact-root "$MLFLOW_ARTIFACT_ROOT" \
     --allowed-hosts "${MLFLOW_URI}" \
     --cors-allowed-origins "*" \
-    --uvicorn-opts "--host 0.0.0.0 --port ${PORT}" \
-    --timeout=120
+    --uvicorn-opts "--host 0.0.0.0 --port ${PORT}"
 
