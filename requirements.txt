@@ -20,7 +20,8 @@ pyarrow>=18.0.0
 protobuf>=5.29.0
 
 # Server & API
-gunicorn==23.0.0
+#gunicorn==23.0.0
+uvicorn
 flask>=3.0.0
 
 # Monitoring & utilities

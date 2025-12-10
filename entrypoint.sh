@@ -39,6 +39,8 @@ exec mlflow server \
     --host 0.0.0.0 \
     --backend-store-uri "$MLFLOW_BACKEND_STORE_URI" \
     --default-artifact-root "$MLFLOW_ARTIFACT_ROOT" \
-    --gunicorn-opts --timeout=120
+    --allowed-hosts "${MLFLOW_URI}" \
+    --cors-allowed-origins "*" \
+    --uvicorn-opts "--host 0.0.0.0 --port ${PORT}" \
+    --timeout=120
 
-#    --allowed-hosts "$MLFLOW_URI" \
