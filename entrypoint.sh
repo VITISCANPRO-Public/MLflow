@@ -7,7 +7,7 @@ export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
 export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
 export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION}"
 export AWS_REGION="${AWS_REGION}"
-export AWS_S3_ENDPOINT="https://s3.${AWS_REGION}.amazonaws.com"
+#export AWS_S3_ENDPOINT="https://s3.${AWS_REGION}.amazonaws.com"
 export AWS_S3_REGION="${AWS_REGION}"
 export S3_BUCKET_NAME="${S3_BUCKET_NAME}"
 export PORT=$PORT
@@ -17,6 +17,7 @@ export MLFLOW_URI="$MLFLOW_URI"
 
 echo "[INFO] AWS_ACCESS_KEY_ID = ${AWS_ACCESS_KEY_ID:0:4}********"
 #echo "[INFO] MLFLOW_BACKEND_STORE_URI = ${MLFLOW_BACKEND_STORE_URI}"
+echo "MLFLOW_ARTIFACT_ROOT = ${MLFLOW_ARTIFACT_ROOT}"
 
 
 if [ "${AWS_CHECK}" == "yes" ]; then
@@ -37,8 +38,8 @@ fi
 exec mlflow server \
     --port $PORT \
     --host 0.0.0.0 \
-    --backend-store-uri "$MLFLOW_BACKEND_STORE_URI" \
-    --default-artifact-root "$MLFLOW_ARTIFACT_ROOT" \
+    --backend-store-uri "${MLFLOW_BACKEND_STORE_URI}" \
+    --default-artifact-root "${MLFLOW_ARTIFACT_ROOT}" \
     --allowed-hosts "${MLFLOW_URI}" \
     --cors-allowed-origins "*" \
     --uvicorn-opts "--host 0.0.0.0 --port ${PORT}"
