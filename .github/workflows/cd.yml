@@ -1,0 +1,30 @@
+name: Deploy to HuggingFace Spaces
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Push to HuggingFace Spaces
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history — required by HuggingFace git push
+          fetch-depth: 0
+          # Pull LFS files (.pth, .pkl, etc.) if any are tracked
+          lfs: true
+
+      - name: Push to HuggingFace Spaces
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config user.email "ci@vitiscan.ai"
+          git config user.name "Vitiscan CI"
+          git push \
+            https://${{ vars.HF_USERNAME }}:$HF_TOKEN@huggingface.co/spaces/${{ vars.HF_USERNAME }}/${{ vars.HF_SPACE_NAME }} \
+            main
