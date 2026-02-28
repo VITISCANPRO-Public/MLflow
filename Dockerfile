@@ -1,44 +1,46 @@
 FROM python:3.11-slim
 
-LABEL description="MLflow 3.7.0 Server with S3 and PostgreSQL (Neon) support"
+LABEL description="MLflow 3.7.0 Server with S3 artifact store and PostgreSQL (Neon) backend"
 
-# Variables d'environnement
+# Disable output buffering, .pyc generation and pip cache for a cleaner image
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Installer les dépendances système nécessaires
+# Install system dependencies
+# - build-essential : required to compile C extensions
+# - libpq-dev       : PostgreSQL C headers, required by psycopg2
+# - curl            : required by the HEALTHCHECK
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Créer un utilisateur non-root pour la sécurité
+# Create a non-root user for security
 RUN useradd -m -u 1000 user
 
-# Basculer vers l'utilisateur non-root
+# Switch to non-root user
 USER user
 ENV HOME=/home/user \
     PATH=/home/user/.local/bin:$PATH
 
-# Définir le répertoire de travail
+# Set working directory
 WORKDIR $HOME/app
 
-# Copier le fichier requirements
-COPY --chown=user Dockerfile entrypoint.sh requirements.txt ./
+# Copy application files
+COPY --chown=user entrypoint.sh requirements.txt ./
 
-# Installer les dépendances Python
+# Install Python dependencies
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# Exposer le port MLflow (7860 pour déploiement HFace)
+# Expose MLflow port (7860 for HuggingFace Spaces)
 EXPOSE 7860
 
-# Healthcheck
+# Health check — verifies the server is running and accepting connections
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:5000/health || exit 1
+    CMD curl -f http://localhost:7860/health || exit 1
 
-# Use entrypoint instead of CMD
 ENTRYPOINT ["bash", "entrypoint.sh"]
