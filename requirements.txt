@@ -12,7 +12,3 @@ sqlalchemy==2.0.36
 # s3fs  : S3 filesystem interface — required by MLflow artifact store
 boto3==1.35.79
 s3fs==2025.12.0
-
-# ─── Utilities ────
-python-dotenv
-requests
