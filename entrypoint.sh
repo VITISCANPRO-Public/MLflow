@@ -12,17 +12,29 @@ echo "[INFO] PORT                   = ${PORT}"
 # ─── Optional AWS credential check ───
 # Set AWS_CHECK=yes to verify credentials before starting the server.
 # Useful for debugging. Set to "no" in production to speed up startup.
+
 if [ "${AWS_CHECK}" == "yes" ]; then
     echo "[INFO] Testing AWS credentials..."
-    aws sts get-caller-identity || {
-        echo "[ERROR] AWS credentials invalid or not transmitted to container."
-        echo "        boto3/MLflow will fail to push artifacts to S3."
-        exit 1
-    }
-    echo "[INFO] AWS credentials OK."
+    python3 -c "
+import boto3, sys
+try:
+    sts = boto3.client('sts')
+    identity = sts.get_caller_identity()
+    print(f\"[INFO] AWS credentials OK — Account: {identity['Account']}\")
+except Exception as e:
+    print(f'[ERROR] AWS credentials invalid: {e}', file=sys.stderr)
+    sys.exit(1)
 
-    echo "[INFO] Checking S3 bucket region..."
-    aws s3api get-bucket-location --bucket "${S3_BUCKET_NAME}"
+try:
+    s3 = boto3.client('s3')
+    location = s3.get_bucket_location(Bucket='${S3_BUCKET_NAME}')
+    region = location['LocationConstraint'] or 'us-east-1'
+    print(f'[INFO] S3 bucket region: {region}')
+except Exception as e:
+    print(f'[ERROR] Cannot access S3 bucket: {e}', file=sys.stderr)
+    sys.exit(1)
+"
+    echo "[INFO] AWS check complete."
 fi
 
 # ─── Start MLflow server ────
