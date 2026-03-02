@@ -9,12 +9,8 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
 # Install system dependencies
-# - build-essential : required to compile C extensions
-# - libpq-dev       : PostgreSQL C headers, required by psycopg2
-# - curl            : required by the HEALTHCHECK
+# - curl : required by the HEALTHCHECK
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    libpq-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
