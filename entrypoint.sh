@@ -8,6 +8,7 @@ echo "[INFO] AWS_ACCESS_KEY_ID      = ${AWS_ACCESS_KEY_ID:0:4}********"
 echo "[INFO] AWS_DEFAULT_REGION     = ${AWS_DEFAULT_REGION}"
 echo "[INFO] MLFLOW_ARTIFACT_ROOT   = ${MLFLOW_ARTIFACT_ROOT}"
 echo "[INFO] PORT                   = ${PORT}"
+echo "[INFO] MLFLOW_CORS_ORIGINS    = ${MLFLOW_CORS_ORIGINS}"
 
 # ─── Optional AWS credential check ───
 # Set AWS_CHECK=yes to verify credentials before starting the server.
@@ -48,6 +49,6 @@ exec mlflow server \
     --backend-store-uri "${MLFLOW_BACKEND_STORE_URI}" \
     --default-artifact-root "${MLFLOW_ARTIFACT_ROOT}" \
     --allowed-hosts "${MLFLOW_ALLOWED_HOSTS:-*}" \
-    --cors-allowed-origins "*"
+    --cors-allowed-origins "${MLFLOW_CORS_ORIGINS:-*}"
 # For the allowed hosts : the syntax -* means that we use the variable 
 # if it exists, otherwise we use * as the default value (accept all hosts)

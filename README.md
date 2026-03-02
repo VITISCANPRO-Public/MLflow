@@ -81,6 +81,8 @@ Copy `.env.template` to `.env` and fill in the values before running locally.
 | `PORT` | Server port — must be `7860` on HuggingFace Spaces |
 | `MLFLOW_ALLOWED_HOSTS` | Allowed hostnames — use `*` for public deployment |
 | `AWS_CHECK`| Set to `yes` to verify AWS credentials on startup |
+| `MLFLOW_CORS_ORIGINS` | Allowed CORS origins (comma-separated) — use `*` for public access |`https://mouniat-vitiscanpro-diagno-api.hf.space,https://mouniat-vitiscan-streamlit.hf.space`
+
 
 > **Note:** `MLFLOW_URI` is not a server variable. It is the public URL that other repositories use to connect to this server after deployment. See [Connecting other repositories](#connecting-other-repositories).
 
